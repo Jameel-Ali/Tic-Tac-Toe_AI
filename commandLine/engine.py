@@ -73,5 +73,36 @@ def get_move():
         except ValueError as e:
             print(f"Invalid input: {e}. Please try again.")
 
-move = get_move()
-print(f"You chose move: {move}")
+
+def make_move(player, board, movement):
+    """
+    Executes move in game by updating board
+    Will not print the board, instead updates board and seperately passes updated board into render
+
+    Parameters:
+        Player making move
+        Board (current state)
+        Coordinates of move
+
+    Returns:
+        New board with given move added
+    """
+    row, col = movement
+    if board[row][col] is not None:
+        raise ValueError("Invalid move: Cell is already occupied.")
+    
+    board[row][col] = player
+
+    return board
+
+board = new_board()
+
+move_coords = (2, 0)
+player = "X"
+board = make_move(player, board, move_coords)
+render(board)
+
+move_coords_2 = (1, 1)
+board = make_move("O", board, move_coords_2)
+render(board)
+
