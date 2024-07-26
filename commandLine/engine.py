@@ -1,6 +1,5 @@
 BOARD_DIMENSION = 3
 
-
 def new_board():
     """
     Create and return a new 2D board of size BOARD_DIMENSION x BOARD_DIMENSION (3x3).
@@ -40,11 +39,12 @@ def render(board):
           |   |  
 
     """
-    seperator_line = '-' * (BOARD_DIMENSION * 4 - 3)
+    seperator_line = '-' * (BOARD_DIMENSION * 4 + 1)
+    print (seperator_line)
     for i, row in enumerate(board):
-        print (' | '.join([' ' if cell is None else cell for cell in row]))
-        if i < BOARD_DIMENSION - 1:
-            print(seperator_line)
+        print ('| ' + ' | '.join([' ' if cell is None else cell for cell in row]) + ' |')
+        print(seperator_line)
+    print()
 
 def get_move():
     """
@@ -86,23 +86,68 @@ def make_move(player, board, movement):
 
     Returns:
         New board with given move added
-    """
-    row, col = movement
-    if board[row][col] is not None:
-        raise ValueError("Invalid move: Cell is already occupied.")
-    
-    board[row][col] = player
 
+    Raises:
+        ValueError => if move invalid (either out of bounds or cell is occupied)
+
+    Example:
+    board = new_board()
+
+    move_coords = (2, 0)
+    player = "X"
+    board = make_move(player, board, move_coords)
+    render(board)
+
+    move_coords_2 = (1, 1)
+    board = make_move("O", board, move_coords_2)
+    render(board)
+
+    move_coords_2 = (1, 1)
+    board = make_move("X", board, move_coords_2)
+    render(board)
+
+    
+    -------------
+    |   |   |   |
+    -------------
+    |   |   |   |
+    -------------
+    | X |   |   |
+    -------------
+
+    -------------
+    |   |   |   |
+    -------------
+    |   | O |   |
+    -------------
+    | X |   |   |
+    -------------
+
+    ValueError: Can't make move (1, 1), square already taken.
+    """
+    if not is_valid_move(board, movement):
+        raise ValueError(f"Can't make move {movement}, square already taken.")
+    
+    row, col = movement
+    board[row][col] = player
     return board
 
-board = new_board()
+def is_valid_move(board, movement):
+    """
+    Validates move to prevent event of player choosing cell that is already occupied
 
-move_coords = (2, 0)
-player = "X"
-board = make_move(player, board, move_coords)
-render(board)
+    Parameters:
+        Board => Current state of board
+        Movement => Coordinates of move in format (r, c)
 
-move_coords_2 = (1, 1)
-board = make_move("O", board, move_coords_2)
-render(board)
+    Returns:
+        Bool => True if move is valid, otherwise False
+    """
+    row, col = movement
+    if 0 <= row < len(board) and 0 <= col < len(board[0]):
+        return board[row][col] is None
+    return False
+
+
+
 
