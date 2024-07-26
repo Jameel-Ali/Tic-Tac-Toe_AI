@@ -21,7 +21,7 @@ if winner not None:
     print "Winner : %s!" % winner
     break
 
-# Case Tie
+# Case : Tie
 if grid_full(grid):
     print "Draw!"
     break
