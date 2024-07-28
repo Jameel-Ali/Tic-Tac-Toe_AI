@@ -1,3 +1,18 @@
+import random
+
+def main_menu():
+    """
+    Presents main menu to player to choose between different game modes.
+    """
+    choice = input("Choose your game mode : \n1 Player vs Player \n2 Player vs AI \nEnter 1 or 2:")
+    if choice == '1':
+        play()
+    elif choice == '2':
+        play_ai()
+    else:
+        print("Invalid input. Please enter 1 or 2.")
+        main_menu()
+
 BOARD_DIMENSION = 3
 
 def new_board():
@@ -174,7 +189,6 @@ def board_full(board):
     Checks for scenario where board is completely filled, resulting in draw
     """
     return all(cell is not None for row in board for cell in row)
-
     
 def play():
     """
@@ -200,5 +214,44 @@ def play():
             break
         current_player = 'O' if current_player == 'X' else 'X'
 
+def random_ai(board,player):
+    empty_spots = [(row,col) for row in range(len(board)) for col in range (len(board[row])) if board[row][col] is None]
+    return random.choice(empty_spots) if empty_spots else None
+
+def play_ai():
+    """
+    Plays game of Tic Tac Toe against an AI
+    """
+    board = new_board()
+    current_player = 'X'
+    ai_player = 'O'
+
+    while True:
+            render(board)
+            if current_player == ai_player:
+                print(f"AI {current_player}'s turn:")
+                move = random_ai(board, current_player)
+                if move is None:
+                    print("DRAW")
+                    break
+                row, col = move
+            else:
+                print(f"player {current_player}'s turn:")
+                row, col = get_move(board)
+
+            make_move(current_player, board, (row, col))
+
+            if check_win(board, current_player):
+                render(board)
+                print(f"WINNER: Player {current_player}!")
+                break
+            if board_full(board):
+                render(board)
+                print("DRAW")
+                break
+
+            current_player = 'O' if current_player == 'X' else 'X'
+
+
 if __name__ == "__main__":
-    play()
+    main_menu()
