@@ -46,9 +46,12 @@ def render(board):
         print(seperator_line)
     print()
 
-def get_move():
+def get_move(board):
     """
     Prompt player to enter move coordinates
+
+    Parameters:
+        board : current state of board to validate move against
 
     Returns:
         2 element tuple representing row and column of chosen move
@@ -69,6 +72,9 @@ def get_move():
             row, col = int(move[0]), int(move[1])
             if not (0 <= row < BOARD_DIMENSION and 0 <= col < BOARD_DIMENSION):
                 raise ValueError(f"Coordinates must be between 0 and {BOARD_DIMENSION - 1}.")
+            if board[row][col] is not None:
+                print("Cell already occupied, please choose another.")
+                continue
             return (row, col)
         except ValueError as e:
             print(f"Invalid input: {e}. Please try again.")
@@ -149,6 +155,9 @@ def is_valid_move(board, movement):
     return False
 
 def check_win(board, player):
+    """
+    Checks the board for the case of a win condition being satisfied
+    """
     # Check rows, columns, diagonals for win
     for i in range(BOARD_DIMENSION):
         if all(board[i][j] == player for j in range(BOARD_DIMENSION)) or \
@@ -161,6 +170,35 @@ def check_win(board, player):
     return False
 
 def board_full(board):
+    """
+    Checks for scenario where board is completely filled, resulting in draw
+    """
     return all(cell is not None for row in board for cell in row)
 
     
+def play():
+    """
+    Plays the game of Tic Tac Toe between 2 players
+    """
+    board = new_board()
+    current_player = 'X'
+
+    while True:
+        render(board)
+        print(f"Player {current_player}'s turn:")
+        row, col = get_move(board)
+        make_move(current_player,board,(row,col))
+
+        winner = check_win(board, current_player)
+        if winner:
+            render(board)
+            print(f"WINNER : {current_player}!")
+            break
+        if board_full(board):
+            render(board)
+            print("DRAW")
+            break
+        current_player = 'O' if current_player == 'X' else 'X'
+
+if __name__ == "__main__":
+    play()
