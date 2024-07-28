@@ -83,7 +83,7 @@ def make_move(player, board, movement):
         Player making move
         Board (current state)
         Coordinates of move
-
+`
     Returns:
         New board with given move added
 
@@ -148,6 +148,19 @@ def is_valid_move(board, movement):
         return board[row][col] is None
     return False
 
+def check_win(board, player):
+    # Check rows, columns, diagonals for win
+    for i in range(BOARD_DIMENSION):
+        if all(board[i][j] == player for j in range(BOARD_DIMENSION)) or \
+           all(board[j][i] == player for j in range(BOARD_DIMENSION)):
+            return True
+    # Check diagonals
+    if all(board[i][i] == player for i in range(BOARD_DIMENSION)) or \
+       all(board[i][BOARD_DIMENSION - 1 - i] == player for i in range(BOARD_DIMENSION)):
+        return True
+    return False
 
+def board_full(board):
+    return all(cell is not None for row in board for cell in row)
 
-
+    
