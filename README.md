@@ -1,5 +1,10 @@
 # Tic Tac Toe Game in Python
 
+<p align="center">
+  <img src="images/startGame.png" alt="Game Start Screenshot" width="207"/>
+  <img src="images/endGame.png" alt="Game End Screenshot" width="300"/>
+</p>
+
 This Tic Tac Toe game is implemented in Python, offering players the option to compete against either another human or an AI. There are two distinct AI strategies included: a Random AI, which selects moves unpredictably and without strategy, and a Minimax AI, which employs a decision-making algorithm to optimise its moves.
 
 ## Features
